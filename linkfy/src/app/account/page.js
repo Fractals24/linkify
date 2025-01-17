@@ -1,16 +1,20 @@
+"use server"; 
+
 import {getServerSession} from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "../api/auth/[...nextauth]/route";
+import grabusername from "@/actions/grabusername";
 
 export default async function AccountPage({searchParams}) {
     const session = getServerSession(authOptions);
     const desiredUsername = searchParams?.desiredUsername;
+
     if(!session){
         redirect('/');
     }
     return (
         <div>
-            <form>
+            <form action={grabusername}>
                 <h1 className="font-bold text-center text-4xl mb-3 p-2 mt-2">
                     Grab your Username
                 </h1>
@@ -19,6 +23,7 @@ export default async function AccountPage({searchParams}) {
                 </p>
                 <div className="max-w-xs mx-auto">
                     <input
+                       name="username"
                        className="mx-auto text-center border w-full p-2 mt-2"
                        defaultValue={desiredUsername}
                        type="text"
